@@ -93,8 +93,7 @@ class PyVCardDirResource( Akonadi.ResourceBase ):
 		items = []
 		for file in fileList:
 			item = Akonadi.Item(QLatin1String( "text/directory" ))
-			item.setRemoteId(path + QLatin1Char('/') + file)
-
+			item.setRemoteId(path + QLatin1Char('/').toLatin1() + file)
 			items.append(item)
 
 		self.itemsRetrieved( items )
