@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Akonadi PyVCardDir Resource
+Comment=Resource for a directory containing contact data files written in python
+ 
+Type=AkonadiResource
+Exec=akonadi_pyvcarddir_resource
+Icon=text-directory
+ 
+X-Akonadi-MimeTypes=text/directory
+X-Akonadi-Capabilities=Resource
+X-Akonadi-Identifier=akonadi_pyvcarddir_resource

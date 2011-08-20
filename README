@@ -1,0 +1,29 @@
+How to create an Akonadi Resource:
+==================================
+- C/C++ language:
+http://techbase.kde.org/Development/Tutorials/Akonadi/Resources
+
+Other info:
+===========
+- First person that I know ask help to create an Akonadi Resource in
+  python:
+http://markmail.org/message/o7ox54axggec564q
+
+- My discussion on kde-pim ML:
+http://markmail.org/message/iyvzxowsecysmk6t
+http://markmail.org/message/2zuv73u3ijtt3tdh
+
+http://markmail.org/message/5wapfc7raijsmiit
+
+http://markmail.org/message/tljuo2t6qsatvbg7
+
+- KConfigMX in pykde4:
+http://www.dennogumi.org/2009/10/howto-kconfigxt-with-pykde4
+
+- vobject:
+http://vobject.skyhouseconsulting.com/
+
+To execute the script in Fedora should be ok to install these packages:
+=======================================================================
+yum install @kde-desktop
+yum install PyKDE4 PyKDE4-akonadi pypython-vobject
