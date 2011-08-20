@@ -82,7 +82,7 @@ class PyVCardDirResource( Akonadi.ResourceBase ):
 		collections = [c]
 		self.collectionsRetrieved(collections)
 
-	def retriveItems(self, collection):
+	def retrieveItems(self, collection):
 		path = collection.remoteId()
 		dir = QDir(path)
 
@@ -94,11 +94,12 @@ class PyVCardDirResource( Akonadi.ResourceBase ):
 		for file in fileList:
 			item = Akonadi.Item(QLatin1String( "text/directory" ))
 			item.setRemoteId(path + QLatin1Char('/').toLatin1() + file)
+			item.setParentCollection(collection)
 			items.append(item)
 
 		self.itemsRetrieved( items )
 
-	def retriveItem(self, item):
+	def retrieveItem(self, item, parts):
 		fileName = item.remoteId()
 
 		file = QFile(fileName)
@@ -147,7 +148,7 @@ class PyVCardDirResource( Akonadi.ResourceBase ):
 		self.changeCommitted(newItem)
 
 
-	def itemChanged(self, item):
+	def itemChanged(self, item, parts):
 		fileName = item.remoteId()
 
 		if item.hasPayload() :
