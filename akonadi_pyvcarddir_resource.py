@@ -12,8 +12,12 @@ from PyQt4.QtGui import *
 
 
 class Settings( KConfigSkeleton ):
+	""" Settings object to bypass kconfig_compiler limitation
+
+	See: http://www.dennogumi.org/2009/10/howto-kconfigxt-with-pykde4 """
 
 	def __init__( self, name="akonadi_pygcal_resource", group="General" ):
+		""" Constructor """
 
 		KConfigSkeleton.__init__( self, name )
 
@@ -29,21 +33,40 @@ class Settings( KConfigSkeleton ):
 
 	@property
 	def path(self):
+		""" Return the path property of the vcard dir setting. """
 		return self._path.value()
 
 	@property
 	def readonly(self):
+		""" Return if the vcard dir is in ReadOnly or not. """
 		return self._readonly.value()
 
 
 class PyVCardDirResource( Akonadi.ResourceBase ):
+	""" Python object that rapresent the Akonadi Resource. """
 
 	def __init__( self, id ):
+		""" Constructor
+
+		TODO: you can put any resource specific initialization code here.
+		"""
 		Akonadi.ResourceBase.__init__( self, id )
 		self.id = id
 		self.settings = Settings( self.id )
 	
 	def configure( self, windowId ):
+		"""
+		TODO: this method is usually called when a new resource is being
+		added to the Akonadi setup. You can do any kind of user interaction here,
+		e.g. showing dialogs.
+		The given window ID is usually useful to get the correct
+		"on top of parent" behavior if the running window manager applies any kind
+		of focus stealing prevention technique
+		
+		If the configuration dialog has been accepted by the user by clicking Ok,
+		the signal configurationDialogAccepted() has to be emitted, otherwise, if
+		the user canceled the dialog, configurationDialogRejected() has to be emitted.
+		"""
 
 		oldPath = self.settings.path
 		if oldPath.isEmpty():
@@ -71,6 +94,11 @@ class PyVCardDirResource( Akonadi.ResourceBase ):
 		self.changeRecorder().itemFetchScope().fetchFullPayload()
 
 	def retrieveCollections(self):
+		"""
+		TODO: this method is called when Akonadi wants to have all the
+		collections your resource provides.
+		Be sure to set the remote ID and the content MIME types
+		"""
 		c = Akonadi.Collection()
 		c.setParent(Akonadi.Collection.root())
 		c.setRemoteId( self.settings.path );
@@ -83,6 +111,13 @@ class PyVCardDirResource( Akonadi.ResourceBase ):
 		self.collectionsRetrieved(collections)
 
 	def retrieveItems(self, collection):
+		"""
+		TODO: this method is called when Akonadi wants to know about all the
+		items in the given collection. You can but don't have to provide all the
+		data for each item, remote ID and MIME type are enough at this stage.
+		Depending on how your resource accesses the data, there are several
+		different ways to tell Akonadi when you are done.
+		"""
 		path = collection.remoteId()
 		dir = QDir(path)
 
@@ -100,6 +135,11 @@ class PyVCardDirResource( Akonadi.ResourceBase ):
 		self.itemsRetrieved( items )
 
 	def retrieveItem(self, item, parts):
+		"""
+		TODO: this method is called when Akonadi wants more data for a given item.
+		You can only provide the parts that have been requested but you are allowed
+		to provide all in one go
+		"""
 		fileName = item.remoteId()
 
 		file = QFile(fileName)
@@ -121,7 +161,22 @@ class PyVCardDirResource( Akonadi.ResourceBase ):
 		self.itemRetrieved(newItem)
 		return True
 
+	def aboutToQuit(self):
+		"""
+		TODO: any cleanup you need to do while there is still an active
+		event loop. The resource will terminate after this method returns
+		"""
+		pass
+
+
 	def itemAdded(self, item, collection):
+		"""
+		TODO: this method is called when somebody else, e.g. a client application,
+		has created an item in a collection managed by your resource.
+
+		NOTE: There is an equivalent method for collections, but it isn't part
+		of this template code to keep it simple
+		"""
 		path = collection.remoteId()
 
 		if item.hasPayload():
@@ -149,6 +204,13 @@ class PyVCardDirResource( Akonadi.ResourceBase ):
 
 
 	def itemChanged(self, item, parts):
+		"""
+		TODO: this method is called when somebody else, e.g. a client application,
+		has changed an item managed by your resource.
+		
+		NOTE: There is an equivalent method for collections, but it isn't part
+		of this template code to keep it simple
+		"""
 		fileName = item.remoteId()
 
 		if item.hasPayload() :
@@ -174,6 +236,13 @@ class PyVCardDirResource( Akonadi.ResourceBase ):
 
 
 	def itemRemoved(self, item):
+		"""
+		TODO: this method is called when somebody else, e.g. a client application,
+		has deleted an item managed by your resource.
+		
+		NOTE: There is an equivalent method for collections, but it isn't part
+		of this template code to keep it simple
+		"""
 		fileName = item.remoteId()
 
 		QFile.remove(fileName)
